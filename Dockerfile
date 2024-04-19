@@ -1,6 +1,10 @@
-# Use distroless as minimal base image to package the manager binary
-# Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:nonroot
-COPY ks-releaser /ks-releaser
+ARG REGISTRY=172.11.0.6:30002/
+FROM ${REGISTRY}docker.io/library/golang:1.20 as builder
+WORKDIR /app
+COPY . .
+RUN go build -o bin/releaser .
 
-ENTRYPOINT ["/ks-releaser"]
+FROM gcr.io/distroless/static:nonroot
+COPY --from=builder /app/bin/releaser /usr/local/bin/releaser
+
+ENTRYPOINT ["releaser"]
