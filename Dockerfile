@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . .
 RUN go build -o bin/releaser .
 
-FROM gcr.io/distroless/static:nonroot
+FROM ${REGISTRY}al-cloud/alpine:3.18.4
 COPY --from=builder /app/bin/releaser /usr/local/bin/releaser
 
 ENTRYPOINT ["releaser"]
