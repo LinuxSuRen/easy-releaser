@@ -34,6 +34,7 @@ type ReleaserSpec struct {
 	Phase        Phase              `json:"phase,omitempty"`
 	Version      string             `json:"version,omitempty"`
 	Repositories []Repository       `json:"repositories,omitempty"`
+	Artifacts    []Artifact         `json:"artifacts,omitempty"`
 	GitOps       *GitOps            `json:"gitOps,omitempty"`
 	Secret       v1.SecretReference `json:"secret,omitempty"`
 }
@@ -98,6 +99,16 @@ func GetDefaultProvider(r *Repository) Provider {
 		return ProviderUnknown
 	}
 	return ""
+}
+
+type Artifact struct {
+	Image ArtifactImage `json:"image"`
+}
+
+type ArtifactImage struct {
+	Image       string       `json:"image"`
+	Tag         string       `json:"tag"`
+	CreatedTime *metav1.Time `json:"createdTime"`
 }
 
 // GitOps indicates to integrate with GitOps
