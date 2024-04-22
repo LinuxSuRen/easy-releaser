@@ -1,5 +1,6 @@
 ARG REGISTRY=172.11.0.6:30002/
 FROM ${REGISTRY}docker.io/library/golang:1.20 as builder
+ARG GOPROXY=direct
 WORKDIR /app
 COPY . .
 RUN go build -o bin/releaser .
