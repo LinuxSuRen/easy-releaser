@@ -1,0 +1,22 @@
+objects:
+  - name: releases
+    initCount: 3
+    sample: |
+      {
+        "name": "test-v0.0.9",
+        "repositories": [{
+          "name": "test",
+          "address": "https://gitee.com/linuxsuren/test.git",
+          "branch": "{{randEnum "master" "main"}}"
+        }],
+        "status": {
+          "completionTime": "2024-04-28T05:41:24Z",
+          "artifacts": [{
+            "image": {
+              "image": "surenpi/test",
+              "tag": "v0.0.9"
+            }
+          }]
+        },
+        "phase": "done"
+      }

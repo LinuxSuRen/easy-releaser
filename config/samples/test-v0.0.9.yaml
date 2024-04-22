@@ -4,6 +4,10 @@ metadata:
   name: test-v0.0.9
 spec:
   version: v0.0.9
+  artifacts:
+    - image:
+        image: 'surenpi/test'
+        tag: 'v0.0.9'
   repositories:
     - name: test
       address: https://gitee.com/linuxsuren/test.git

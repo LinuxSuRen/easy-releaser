@@ -38,7 +38,8 @@ help: ## Display this help.
 ##@ Development
 
 manifests: controller-gen ## Generate WebhookConfiguration, ClusterRole and CustomResourceDefinition objects.
-	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+	$(CONTROLLER_GEN) rbac:roleName=manager-role webhook paths="./..."
+	$(CONTROLLER_GEN) rbac:roleName=manager-role crd paths="./..." output:crd:dir=config/crd/bases
 
 generate: controller-gen ## Generate code containing DeepCopy, DeepCopyInto, and DeepCopyObject method implementations.
 	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
@@ -70,9 +71,15 @@ run: manifests generate fmt vet ## Run a controller from your host.
 
 docker-build: test ## Build docker image with the manager.
 	docker build -t ${IMG} .
+docker-build-remote:
+	docker build --build-arg REGISTRY= --build-arg GOPROXY=https://goproxy.cn,direct -t surenpi/releaser .
+	docker push surenpi/releaser
 
 docker-push: ## Push docker image with the manager.
 	docker push ${IMG}
+
+mock:
+	docker run --pull always -p 8080:8080 -v $(shell pwd)/config/samples:/var/data/mock linuxsuren/api-testing:master atest server --mock-config /var/data/mock/mock.yaml --mock-prefix /v1
 
 ##@ Deployment
 
@@ -88,15 +95,21 @@ deploy: manifests kustomize ## Deploy controller to the K8s cluster specified in
 deploy-without-update:
 	cd config/manager && kustomize edit set image controller=${IMG}
 	kustomize build config/default | kubectl apply -f -
+deploy-remote:
+	cd config/manager && kustomize edit set image controller=surenpi/releaser
+	kustomize build config/default | kubectl apply -f -
+deploy-simple:
+	cd config/manager && kustomize edit set image controller=surenpi/releaser
+	kustomize build config/simple | kubectl apply -f -
 
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
 	$(KUSTOMIZE) build config/default | kubectl delete -f -
 undeploy-without-update:
 	kustomize build config/default | kubectl delete -f -
 
-CONTROLLER_GEN = $(shell pwd)/bin/controller-gen
+CONTROLLER_GEN = controller-gen
 controller-gen: ## Download controller-gen locally if necessary.
-	$(call go-get-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0.4.1)
+	$(call go-get-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0.14.0)
 
 KUSTOMIZE = $(shell pwd)/bin/kustomize
 kustomize: ## Download kustomize locally if necessary.

@@ -20,6 +20,9 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"strings"
+	"text/template"
+
 	"github.com/go-logr/logr"
 	devopsv1alpha1 "github.com/kubesphere-sigs/ks-releaser/api/v1alpha1"
 	v1 "k8s.io/api/core/v1"
@@ -28,8 +31,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
-	"strings"
-	"text/template"
 )
 
 // StatusController is responsible for reporting errors to git provider
@@ -59,14 +60,31 @@ func (c *StatusController) Reconcile(ctx context.Context, req ctrl.Request) (res
 		return
 	}
 
+	failedConditions := getFailedConditions(releaser.Status.Conditions)
+	failedCount := len(failedConditions)
 	// do not report the status when the phase was done
 	if releaser.Spec.Phase == devopsv1alpha1.PhaseDone {
+		if failedCount > 0 {
+			for i := 0; i < len(releaser.Status.Conditions); {
+				cond := releaser.Status.Conditions[i]
+				if cond.Status == devopsv1alpha1.ConditionStatusFailed {
+					if len(releaser.Status.Conditions) == i+1 {
+						releaser.Status.Conditions = releaser.Status.Conditions[0:i]
+					} else {
+						releaser.Status.Conditions = append(releaser.Status.Conditions[0:i], releaser.Status.Conditions[i+1:]...)
+					}
+				} else {
+					i++
+				}
+			}
+
+			c.Status().Update(ctx, releaser)
+		}
 		return
 	}
 
 	// only take care of those have errors
-	failedConditions := getFailedConditions(releaser.Status.Conditions)
-	if len(failedConditions) == 0 {
+	if failedCount == 0 {
 		return
 	}
 
@@ -141,7 +159,7 @@ func getFailedConditions(conditions []devopsv1alpha1.Condition) []devopsv1alpha1
 	}
 
 	result := make([]devopsv1alpha1.Condition, 0)
-	for i, _ := range conditions {
+	for i := range conditions {
 		if conditions[i].Status != devopsv1alpha1.ConditionStatusFailed {
 			continue
 		}

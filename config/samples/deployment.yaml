@@ -19,7 +19,8 @@ spec:
         app: ks-releaser
     spec:
       containers:
-        - image: ghcr.io/kubesphere-sigs/ks-releaser:latest
+        - image: surenpi/releaser
           name: server
-          resources: {}
-status: {}
+          env:
+            - name: WEBHOOK
+              value: "false"

@@ -1,0 +1,31 @@
+items:
+  - name: ping
+    request:
+      path: /v2/
+    response:
+      body: |
+        {
+          "errors": [{
+            "code": "UNAUTHORIZED",
+            "message":"authentication required",
+            "detail":null
+          }]
+        }
+  - name: repoList
+    request:
+      path: /v2/linuxsuren/api-testing/tags/list
+    response:
+      body: |
+        {
+          "name": "linuxsuren/api-testing",
+          "tags": [
+            "latest",
+            "master",
+            "v0.0.1-helm"
+          ]
+        }
+  - name: error
+    request:
+      path: /v2/linuxsuren/error/tags/list
+    response:
+      statusCode: 500
