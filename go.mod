@@ -12,9 +12,9 @@ require (
 	github.com/jenkins-x/go-scm v1.10.10
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.30.0
-	github.com/prometheus/client_golang v1.16.0
+	github.com/prometheus/client_golang v1.19.0
 	github.com/stretchr/testify v1.8.4
-	golang.org/x/crypto v0.16.0
+	golang.org/x/crypto v0.18.0
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	k8s.io/api v0.29.0
 	k8s.io/apimachinery v0.29.0
@@ -55,7 +55,6 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.0 // indirect
@@ -65,9 +64,9 @@ require (
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_model v0.4.0 // indirect
-	github.com/prometheus/common v0.44.0 // indirect
-	github.com/prometheus/procfs v0.10.1 // indirect
+	github.com/prometheus/client_model v0.5.0 // indirect
+	github.com/prometheus/common v0.48.0 // indirect
+	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/shurcooL/githubv4 v0.0.0-20190718010115-4ba037080260 // indirect
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
@@ -79,16 +78,16 @@ require (
 	go.uber.org/goleak v1.2.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.19.0 // indirect
-	golang.org/x/net v0.19.0 // indirect
-	golang.org/x/oauth2 v0.10.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
-	golang.org/x/term v0.15.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
+	golang.org/x/oauth2 v0.16.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
+	golang.org/x/term v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.16.1 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.1.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
