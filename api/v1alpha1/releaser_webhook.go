@@ -18,11 +18,13 @@ package v1alpha1
 
 import (
 	"errors"
-	"k8s.io/apimachinery/pkg/runtime"
 	"reflect"
+
+	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 // log is for logging in this package.
@@ -88,30 +90,30 @@ func (r *Releaser) Default() {
 var _ webhook.Validator = &Releaser{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *Releaser) ValidateCreate() error {
+func (r *Releaser) ValidateCreate() (admission.Warnings, error) {
 	releaserlog.Info("validate create", "name", r.Name)
 
 	if !r.Spec.Phase.IsValid() {
-		return errors.New("invalid phase")
+		return []string{"invalid phase"}, errors.New("invalid phase")
 	}
-	return nil
+	return nil, nil
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *Releaser) ValidateUpdate(old runtime.Object) error {
+func (r *Releaser) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	releaserlog.Info("validate update", "name", r.Name)
 
 	oldReleaser := old.(*Releaser)
 	if oldReleaser.Spec.Phase == PhaseDone && !reflect.DeepEqual(oldReleaser.Spec, r.Spec) {
-		return errors.New("not allow to manipulate this release any more once the phase is done")
+		return []string{"not allow"}, errors.New("not allow to manipulate this release any more once the phase is done")
 	}
-	return nil
+	return nil, nil
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *Releaser) ValidateDelete() error {
+func (r *Releaser) ValidateDelete() (admission.Warnings, error) {
 	releaserlog.Info("validate delete", "name", r.Name)
 
 	// TODO(user): fill in your validation logic upon object deletion.
-	return nil
+	return nil, nil
 }

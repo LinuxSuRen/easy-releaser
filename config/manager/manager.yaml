@@ -25,7 +25,7 @@ spec:
 #      securityContext:
 #        runAsNonRoot: true
       containers:
-      - image: ghcr.io/kubesphere-sigs/ks-releaser:latest
+      - image: surenpi/releaser
         imagePullPolicy: Always
         name: manager
         securityContext:

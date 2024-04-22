@@ -17,9 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"strings"
+
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"strings"
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
@@ -34,7 +35,7 @@ type ReleaserSpec struct {
 	Phase        Phase              `json:"phase,omitempty"`
 	Version      string             `json:"version,omitempty"`
 	Repositories []Repository       `json:"repositories,omitempty"`
-	Artifacts    []Artifact         `json:"artifacts,omitempty"`
+	Artifacts    Artifacts          `json:"artifacts,omitempty"`
 	GitOps       *GitOps            `json:"gitOps,omitempty"`
 	Secret       v1.SecretReference `json:"secret,omitempty"`
 }
@@ -101,6 +102,7 @@ func GetDefaultProvider(r *Repository) Provider {
 	return ""
 }
 
+type Artifacts []Artifact
 type Artifact struct {
 	Image ArtifactImage `json:"image"`
 }
@@ -108,7 +110,7 @@ type Artifact struct {
 type ArtifactImage struct {
 	Image       string       `json:"image"`
 	Tag         string       `json:"tag"`
-	CreatedTime *metav1.Time `json:"createdTime"`
+	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
 }
 
 // GitOps indicates to integrate with GitOps
@@ -147,6 +149,7 @@ type ReleaserStatus struct {
 	// +optional
 	CompletionTime *metav1.Time `json:"completionTime,omitempty"`
 	Conditions     []Condition  `json:"conditions,omitempty"`
+	Artifacts      Artifacts    `json:"artifacts,omitempty"`
 }
 
 // Condition indicates the status of each git repositories

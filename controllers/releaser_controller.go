@@ -19,15 +19,16 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"net/url"
+	"path"
+	"time"
+
 	"github.com/go-git/go-git/v5"
 	"github.com/go-logr/logr"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"net/url"
-	"path"
 	"sigs.k8s.io/yaml"
-	"time"
 
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -127,7 +128,7 @@ func (r *ReleaserReconciler) Reconcile(ctx context.Context, req ctrl.Request) (r
 	}
 
 	if updateErr := r.Status().Update(ctx, releaser); err == nil && updateErr == nil {
-		err = r.updateHash(ctx, releaser)
+		_ = r.updateHash(ctx, releaser)
 	} else if err == nil && updateErr != nil {
 		err = updateErr
 	}
