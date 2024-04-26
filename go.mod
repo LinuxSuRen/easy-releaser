@@ -11,7 +11,7 @@ require (
 	github.com/jenkins-x/go-scm v1.10.10
 	github.com/linuxsuren/api-testing v0.0.17-0.20240425125515-8dad2468f627
 	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.32.0
+	github.com/onsi/gomega v1.33.0
 	github.com/prometheus/client_golang v1.19.0
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/crypto v0.21.0
